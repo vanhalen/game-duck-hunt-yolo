@@ -105,6 +105,7 @@ function* processPrediction({ boxes, scores, classes }, width, height) {
 
 loadModelAndLabels();
 
+// modo GOD
 self.onmessage = async ({ data }) => {
     if (data.type !== 'predict') return
     if (!_model) return;

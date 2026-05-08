@@ -5,32 +5,33 @@ module.exports.pointDistance = function(point1, point2) {
 };
 
 module.exports.directionOfTravel = function(pointStart, pointEnd) {
-  let direction = '';
-
-  //positive means down
+  // positive rise = moving down (screen Y increases downward)
   const rise = pointEnd.y - pointStart.y;
-  //positive means right
   const run = pointEnd.x - pointStart.x;
 
-  if (run < 1 && rise < 1) {
-    direction = 'top-left';
-  } else if (run < 1 && rise > 1) {
-    direction = 'bottom-left';
-  } else if (run > 1 && rise < 1) {
-    direction = 'top-right';
-  } else if (run > 1 && rise > 1) {
-    direction = 'bottom-right';
+  if (run === 0 && rise === 0) {
+    return 'top-left';
   }
 
-  if (run !== 0 && Math.abs(rise/run) < 0.3) {
-    if (run > 1) {
-      direction = 'right';
-    } else {
-      direction = 'left';
-    }
+  // Nearly horizontal flight: prefer left/right sprites
+  if (run !== 0 && Math.abs(rise / run) < 0.3) {
+    return run > 0 ? 'right' : 'left';
   }
 
-  return direction;
+  if (run === 0) {
+    return rise > 0 ? 'bottom-left' : 'top-left';
+  }
+
+  if (run > 0 && rise <= 0) {
+    return 'top-right';
+  }
+  if (run > 0 && rise > 0) {
+    return 'bottom-right';
+  }
+  if (run < 0 && rise <= 0) {
+    return 'top-left';
+  }
+  return 'bottom-left';
 };
 
 module.exports.toggleFullscreen = function() {

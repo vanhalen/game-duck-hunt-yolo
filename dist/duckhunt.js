@@ -108,27 +108,71 @@ function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { 
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
+var PREDICT_INTERVAL_MS = 320;
 function main(_x) {
   return _main.apply(this, arguments);
 }
 function _main() {
-  _main = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(game) {
-    var container, worker;
-    return _regenerator().w(function (_context) {
-      while (1) switch (_context.n) {
+  _main = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(game) {
+    var container, worker, godModeEnabled, predictIntervalId, stopPredictLoop, startPredictLoop, setGodMode;
+    return _regenerator().w(function (_context2) {
+      while (1) switch (_context2.n) {
         case 0:
+          setGodMode = function _setGodMode(enabled) {
+            godModeEnabled = enabled;
+            if (enabled) {
+              startPredictLoop();
+            } else {
+              stopPredictLoop();
+              game.stage.aim.visible = false;
+            }
+          };
+          startPredictLoop = function _startPredictLoop() {
+            stopPredictLoop();
+            predictIntervalId = setInterval(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+              var canvas, bitmap;
+              return _regenerator().w(function (_context) {
+                while (1) switch (_context.n) {
+                  case 0:
+                    if (!(!godModeEnabled || game.paused)) {
+                      _context.n = 1;
+                      break;
+                    }
+                    return _context.a(2);
+                  case 1:
+                    canvas = game.app.renderer.extract.canvas(game.stage);
+                    _context.n = 2;
+                    return createImageBitmap(canvas);
+                  case 2:
+                    bitmap = _context.v;
+                    worker.postMessage({
+                      type: 'predict',
+                      image: bitmap
+                    }, [bitmap]);
+                  case 3:
+                    return _context.a(2);
+                }
+              }, _callee);
+            })), PREDICT_INTERVAL_MS);
+          };
+          stopPredictLoop = function _stopPredictLoop() {
+            if (predictIntervalId != null) {
+              clearInterval(predictIntervalId);
+              predictIntervalId = null;
+            }
+          };
           container = (0,_layout__WEBPACK_IMPORTED_MODULE_0__.buildLayout)(game.app);
           worker = new Worker(new URL(/* worker import */ __webpack_require__.p + __webpack_require__.u("machine-learning_worker_js"), __webpack_require__.b), {
             type: undefined
           });
+          godModeEnabled = false;
+          predictIntervalId = null;
           game.stage.aim.visible = false;
-          worker.onmessage = function (_ref) {
-            var data = _ref.data;
-            var type = data.type,
-              x = data.x,
-              y = data.y;
-            if (type === 'prediction') {
-              console.log("\uD83C\uDFAF AI predicted at: (".concat(x, ", ").concat(y, ")"));
+          worker.onmessage = function (_ref2) {
+            var data = _ref2.data;
+            var type = data.type;
+            if (type === 'prediction' && godModeEnabled && !game.paused) {
+              console.log("\uD83C\uDFAF AI predicted at: (".concat(data.x, ", ").concat(data.y, ")"));
               container.updateHUD(data);
               game.stage.aim.visible = true;
               game.stage.aim.setPosition(data.x, data.y);
@@ -138,20 +182,11 @@ function _main() {
               });
             }
           };
-
-          // setInterval(async () => {
-          //     const canvas = game.app.renderer.extract.canvas(game.stage);
-          //     const bitmap = await createImageBitmap(canvas);
-
-          //     worker.postMessage({
-          //         type: 'predict',
-          //         image: bitmap,
-          //     }, [bitmap]);
-
-          // }, 200); // every 200ms
-          return _context.a(2, container);
+          return _context2.a(2, {
+            setGodMode: setGodMode
+          });
       }
-    }, _callee);
+    }, _callee2);
   }));
   return _main.apply(this, arguments);
 }
@@ -110638,29 +110673,30 @@ module.exports.pointDistance = function (point1, point2) {
   return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
 };
 module.exports.directionOfTravel = function (pointStart, pointEnd) {
-  var direction = '';
-
-  //positive means down
+  // positive rise = moving down (screen Y increases downward)
   var rise = pointEnd.y - pointStart.y;
-  //positive means right
   var run = pointEnd.x - pointStart.x;
-  if (run < 1 && rise < 1) {
-    direction = 'top-left';
-  } else if (run < 1 && rise > 1) {
-    direction = 'bottom-left';
-  } else if (run > 1 && rise < 1) {
-    direction = 'top-right';
-  } else if (run > 1 && rise > 1) {
-    direction = 'bottom-right';
+  if (run === 0 && rise === 0) {
+    return 'top-left';
   }
+
+  // Nearly horizontal flight: prefer left/right sprites
   if (run !== 0 && Math.abs(rise / run) < 0.3) {
-    if (run > 1) {
-      direction = 'right';
-    } else {
-      direction = 'left';
-    }
+    return run > 0 ? 'right' : 'left';
   }
-  return direction;
+  if (run === 0) {
+    return rise > 0 ? 'bottom-left' : 'top-left';
+  }
+  if (run > 0 && rise <= 0) {
+    return 'top-right';
+  }
+  if (run > 0 && rise > 0) {
+    return 'bottom-right';
+  }
+  if (run < 0 && rise <= 0) {
+    return 'top-left';
+  }
+  return 'bottom-left';
 };
 module.exports.toggleFullscreen = function () {
   var doc = window.document;
@@ -111589,6 +111625,8 @@ var Game = /*#__PURE__*/function () {
     this.timePaused = 0;
     this.muted = false;
     this.paused = false;
+    this.godMode = false;
+    this.mlGod = null;
     this.activeSounds = [];
     this.waveEnding = false;
     this.quackingSoundId = null;
@@ -111870,6 +111908,7 @@ var Game = /*#__PURE__*/function () {
       this.addPauseLink();
       this.addMuteLink();
       this.addFullscreenLink();
+      this.addGodModeLink();
       this.bindEvents();
       this.startLevel();
       this.animate();
@@ -111927,6 +111966,19 @@ var Game = /*#__PURE__*/function () {
       this.stage.hud.levelCreatorLink = 'level creator (c)';
     }
   }, {
+    key: "addGodModeLink",
+    value: function addGodModeLink() {
+      this.stage.hud.createTextBox('godModeLink', {
+        style: BOTTOM_LINK_STYLE,
+        location: _Stage__WEBPACK_IMPORTED_MODULE_3__["default"].godModeLinkBoxLocation(),
+        anchor: {
+          x: 1,
+          y: 1
+        }
+      });
+      this.stage.hud.godModeLink = 'god (g)';
+    }
+  }, {
     key: "bindEvents",
     value: function bindEvents() {
       var _this = this;
@@ -111945,6 +111997,9 @@ var Game = /*#__PURE__*/function () {
         }
         if (event.key === 'f') {
           _this.fullscreen();
+        }
+        if (event.key === 'g') {
+          _this.toggleGodMode();
         }
       });
       document.addEventListener('fullscreenchange', function () {
@@ -111967,6 +112022,16 @@ var Game = /*#__PURE__*/function () {
     value: function fullscreen() {
       this.isFullscreen = !this.isFullscreen;
       _libs_utils__WEBPACK_IMPORTED_MODULE_6__.toggleFullscreen();
+    }
+  }, {
+    key: "toggleGodMode",
+    value: function toggleGodMode() {
+      if (!this.mlGod) {
+        return;
+      }
+      this.godMode = !this.godMode;
+      this.stage.hud.godModeLink = this.godMode ? 'ungod (g)' : 'god (g)';
+      this.mlGod.setGodMode(this.godMode);
     }
   }, {
     key: "pause",
@@ -112205,6 +112270,10 @@ var Game = /*#__PURE__*/function () {
       }
       if (this.stage.clickedLevelCreatorLink(clickPoint)) {
         this.openLevelCreator();
+        return;
+      }
+      if (this.stage.clickedGodModeLink(clickPoint)) {
+        this.toggleGodMode();
         return;
       }
       if (!this.stage.hud.replayButton && !this.outOfAmmo() && !this.shouldWaveEnd() && !this.paused) {
@@ -112463,6 +112532,7 @@ var HUD_LOCATIONS = {
   SCORE: new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Point(MAX_X - 10, 10),
   WAVE_STATUS: new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Point(MAX_X - 11, MAX_Y - 30),
   LEVEL_CREATOR_LINK: new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Point(MAX_X - 11, MAX_Y - 10),
+  GOD_MODE_LINK: new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Point(MAX_X - 400, MAX_Y - 10),
   FULL_SCREEN_LINK: new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Point(MAX_X - 130, MAX_Y - 10),
   PAUSE_LINK: new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Point(MAX_X - 318, MAX_Y - 10),
   MUTE_LINK: new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Point(MAX_X - 236, MAX_Y - 10),
@@ -112682,6 +112752,12 @@ var Stage = /*#__PURE__*/function (_Container) {
       return (0,lodash_number__WEBPACK_IMPORTED_MODULE_4__.inRange)(scaledClickPoint.x, HUD_LOCATIONS.MUTE_LINK.x - 110, HUD_LOCATIONS.MUTE_LINK.x) && (0,lodash_number__WEBPACK_IMPORTED_MODULE_4__.inRange)(scaledClickPoint.y, HUD_LOCATIONS.MUTE_LINK.y - 30, HUD_LOCATIONS.MUTE_LINK.y + 10);
     }
   }, {
+    key: "clickedGodModeLink",
+    value: function clickedGodModeLink(clickPoint) {
+      var scaledClickPoint = this.getScaledClickLocation(clickPoint);
+      return (0,lodash_number__WEBPACK_IMPORTED_MODULE_4__.inRange)(scaledClickPoint.x, HUD_LOCATIONS.GOD_MODE_LINK.x - 110, HUD_LOCATIONS.GOD_MODE_LINK.x) && (0,lodash_number__WEBPACK_IMPORTED_MODULE_4__.inRange)(scaledClickPoint.y, HUD_LOCATIONS.GOD_MODE_LINK.y - 30, HUD_LOCATIONS.GOD_MODE_LINK.y + 10);
+    }
+  }, {
     key: "getScaledClickLocation",
     value: function getScaledClickLocation(clickPoint) {
       return {
@@ -112843,6 +112919,11 @@ var Stage = /*#__PURE__*/function (_Container) {
     key: "levelCreatorLinkBoxLocation",
     value: function levelCreatorLinkBoxLocation() {
       return HUD_LOCATIONS.LEVEL_CREATOR_LINK;
+    }
+  }, {
+    key: "godModeLinkBoxLocation",
+    value: function godModeLinkBoxLocation() {
+      return HUD_LOCATIONS.GOD_MODE_LINK;
     }
   }, {
     key: "replayButtonLocation",
@@ -113191,6 +113272,8 @@ document.addEventListener('DOMContentLoaded', /*#__PURE__*/_asyncToGenerator(/*#
         _context.n = 2;
         return (0,_machine_learning_main__WEBPACK_IMPORTED_MODULE_0__["default"])(game);
       case 2:
+        game.mlGod = _context.v;
+      case 3:
         return _context.a(2);
     }
   }, _callee);

@@ -1,44 +1,65 @@
-import { buildLayout } from "./layout";
+import { buildLayout } from './layout';
+
+const PREDICT_INTERVAL_MS = 320;
 
 export default async function main(game) {
-    const container = buildLayout(game.app);
-    const worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
+  const container = buildLayout(game.app);
+  const worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
 
-    game.stage.aim.visible = false;
+  let godModeEnabled = false;
+  let predictIntervalId = null;
 
-    worker.onmessage = ({ data }) => {
-        const { type, x, y } = data;
+  game.stage.aim.visible = false;
 
-        if (type === 'prediction') {
-            console.log(`🎯 AI predicted at: (${x}, ${y})`);
-            container.updateHUD(data);
-            game.stage.aim.visible = true;
+  function stopPredictLoop() {
+    if (predictIntervalId != null) {
+      clearInterval(predictIntervalId);
+      predictIntervalId = null;
+    }
+  }
 
-            game.stage.aim.setPosition(data.x, data.y);
-            const position = game.stage.aim.getGlobalPosition();
+  function startPredictLoop() {
+    stopPredictLoop();
+    predictIntervalId = setInterval(async () => {
+      if (!godModeEnabled || game.paused) {
+        return;
+      }
+      const canvas = game.app.renderer.extract.canvas(game.stage);
+      const bitmap = await createImageBitmap(canvas);
 
-            game.handleClick({
-                global: position,
-            });
+      worker.postMessage({
+        type: 'predict',
+        image: bitmap,
+      }, [bitmap]);
+    }, PREDICT_INTERVAL_MS);
+  }
 
-        }
+  worker.onmessage = ({ data }) => {
+    const { type } = data;
 
-    };
+    if (type === 'prediction' && godModeEnabled && !game.paused) {
+      console.log(`🎯 AI predicted at: (${data.x}, ${data.y})`);
+      container.updateHUD(data);
+      game.stage.aim.visible = true;
 
-    /**
-     * Basicamente tira um print da tela a cada 200ms e envia
-     * para o worker para ser processado.
-     */
-    setInterval(async () => {
-        const canvas = game.app.renderer.extract.canvas(game.stage);
-        const bitmap = await createImageBitmap(canvas);
+      game.stage.aim.setPosition(data.x, data.y);
+      const position = game.stage.aim.getGlobalPosition();
 
-        worker.postMessage({
-            type: 'predict',
-            image: bitmap,
-        }, [bitmap]);
+      game.handleClick({
+        global: position,
+      });
+    }
+  };
 
-    }, 320); // every 200ms
+  function setGodMode(enabled) {
+    godModeEnabled = enabled;
+    if (enabled) {
+      startPredictLoop();
+    } else {
+      stopPredictLoop();
+      game.stage.aim.visible = false;
+    }
+  }
 
-    return container;
+  return { setGodMode };
 }

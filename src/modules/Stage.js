@@ -26,6 +26,7 @@ const HUD_LOCATIONS = {
   SCORE: new Point(MAX_X - 10, 10),
   WAVE_STATUS: new Point(MAX_X - 11, MAX_Y - 30),
   LEVEL_CREATOR_LINK: new Point(MAX_X - 11, MAX_Y - 10),
+  GOD_MODE_LINK: new Point(MAX_X - 400, MAX_Y - 10),
   FULL_SCREEN_LINK: new Point(MAX_X - 130, MAX_Y - 10),
   PAUSE_LINK: new Point(MAX_X - 318, MAX_Y - 10),
   MUTE_LINK: new Point(MAX_X - 236, MAX_Y - 10),
@@ -103,6 +104,10 @@ class Stage extends Container {
 
   static levelCreatorLinkBoxLocation() {
     return HUD_LOCATIONS.LEVEL_CREATOR_LINK;
+  }
+
+  static godModeLinkBoxLocation() {
+    return HUD_LOCATIONS.GOD_MODE_LINK;
   }
 
   static replayButtonLocation() {
@@ -274,6 +279,12 @@ class Stage extends Container {
     const scaledClickPoint = this.getScaledClickLocation(clickPoint);
     return _inRange(scaledClickPoint.x, HUD_LOCATIONS.MUTE_LINK.x - 110, HUD_LOCATIONS.MUTE_LINK.x) &&
       _inRange(scaledClickPoint.y, HUD_LOCATIONS.MUTE_LINK.y - 30, HUD_LOCATIONS.MUTE_LINK.y + 10);
+  }
+
+  clickedGodModeLink(clickPoint) {
+    const scaledClickPoint = this.getScaledClickLocation(clickPoint);
+    return _inRange(scaledClickPoint.x, HUD_LOCATIONS.GOD_MODE_LINK.x - 110, HUD_LOCATIONS.GOD_MODE_LINK.x) &&
+      _inRange(scaledClickPoint.y, HUD_LOCATIONS.GOD_MODE_LINK.y - 30, HUD_LOCATIONS.GOD_MODE_LINK.y + 10);
   }
 
   getScaledClickLocation(clickPoint) {

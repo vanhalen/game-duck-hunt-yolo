@@ -30,6 +30,8 @@ class Game {
     this.timePaused = 0;
     this.muted = false;
     this.paused = false;
+    this.godMode = false;
+    this.mlGod = null;
     this.activeSounds = [];
 
     this.waveEnding = false;
@@ -280,6 +282,7 @@ class Game {
     this.addPauseLink();
     this.addMuteLink();
     this.addFullscreenLink();
+    this.addGodModeLink();
     this.bindEvents();
     this.startLevel();
     this.animate();
@@ -333,6 +336,18 @@ class Game {
     this.stage.hud.levelCreatorLink = 'level creator (c)';
   }
 
+  addGodModeLink() {
+    this.stage.hud.createTextBox('godModeLink', {
+      style: BOTTOM_LINK_STYLE,
+      location: Stage.godModeLinkBoxLocation(),
+      anchor: {
+        x: 1,
+        y: 1
+      }
+    });
+    this.stage.hud.godModeLink = 'god (g)';
+  }
+
   bindEvents() {
     window.addEventListener('resize', this.scaleToWindow.bind(this));
     this.stage.on('pointerdown', this.handleClick.bind(this));
@@ -354,6 +369,10 @@ class Game {
 
       if (event.key === 'f') {
         this.fullscreen();
+      }
+
+      if (event.key === 'g') {
+        this.toggleGodMode();
       }
     });
 
@@ -377,6 +396,15 @@ class Game {
   fullscreen() {
     this.isFullscreen = !this.isFullscreen;
     utils.toggleFullscreen();
+  }
+
+  toggleGodMode() {
+    if (!this.mlGod) {
+      return;
+    }
+    this.godMode = !this.godMode;
+    this.stage.hud.godModeLink = this.godMode ? 'ungod (g)' : 'god (g)';
+    this.mlGod.setGodMode(this.godMode);
   }
 
   pause() {
@@ -594,6 +622,11 @@ class Game {
 
     if (this.stage.clickedLevelCreatorLink(clickPoint)) {
       this.openLevelCreator();
+      return;
+    }
+
+    if (this.stage.clickedGodModeLink(clickPoint)) {
+      this.toggleGodMode();
       return;
     }
 
