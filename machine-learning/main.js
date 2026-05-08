@@ -25,16 +25,20 @@ export default async function main(game) {
 
     };
 
-    // setInterval(async () => {
-    //     const canvas = game.app.renderer.extract.canvas(game.stage);
-    //     const bitmap = await createImageBitmap(canvas);
+    /**
+     * Basicamente tira um print da tela a cada 200ms e envia
+     * para o worker para ser processado.
+     */
+    setInterval(async () => {
+        const canvas = game.app.renderer.extract.canvas(game.stage);
+        const bitmap = await createImageBitmap(canvas);
 
-    //     worker.postMessage({
-    //         type: 'predict',
-    //         image: bitmap,
-    //     }, [bitmap]);
+        worker.postMessage({
+            type: 'predict',
+            image: bitmap,
+        }, [bitmap]);
 
-    // }, 200); // every 200ms
+    }, 320); // every 200ms
 
     return container;
 }
