@@ -112433,10 +112433,6 @@ var Game = /*#__PURE__*/function () {
       window.addEventListener('resize', this.scaleToWindow.bind(this));
       this.stage.on('pointerdown', this.handleClick.bind(this));
       document.addEventListener('keypress', function (event) {
-        event.stopImmediatePropagation();
-        if (event.key === 'p') {
-          _this.pause();
-        }
         if (event.key === 'm') {
           _this.mute();
         }

@@ -353,12 +353,6 @@ class Game {
     this.stage.on('pointerdown', this.handleClick.bind(this));
 
     document.addEventListener('keypress', (event) => {
-      event.stopImmediatePropagation();
-
-      if (event.key === 'p') {
-        this.pause();
-      }
-
       if (event.key === 'm') {
         this.mute();
       }

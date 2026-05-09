@@ -271,7 +271,7 @@
       </p>
 
       <p class="hint">
-        <kbd>i</kbd> abre/fecha &middot; <kbd>Esc</kbd> fecha &middot; o jogo pausa enquanto este painel está aberto
+        <kbd>p</kbd> ou <kbd>i</kbd> abre/fecha &middot; <kbd>Esc</kbd> fecha &middot; o jogo pausa enquanto este painel está aberto
       </p>
     </div>
   </div>
@@ -284,7 +284,6 @@
       var yearEl = document.getElementById('currentYear');
       if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-      // Pausa o jogo somente se NÃO estava pausado já (pra não competir com a tecla 'p').
       var pausedByModal = false;
 
       function getGame() { return window.game; }
@@ -322,12 +321,14 @@
         if (e.target === modal) closeModal();
       });
 
-      // Atalhos: 'i' alterna, 'Esc' fecha. Não interfere com p/g/m/c/f do jogo.
+      // Atalhos: 'i' e 'p' alternam o modal (o pause/unpause é feito por openModal/
+      // closeModal). 'Esc' fecha. O Game.js não trata mais 'p' — centralizado aqui.
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeModal();
       });
       document.addEventListener('keypress', function (e) {
-        if (e.key === 'i' || e.key === 'I') {
+        var key = (e.key || '').toLowerCase();
+        if (key === 'i' || key === 'p') {
           if (modal.classList.contains('is-open')) closeModal();
           else openModal();
         }
