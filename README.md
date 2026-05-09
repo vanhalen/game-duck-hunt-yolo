@@ -14,8 +14,8 @@ Os pontos centrais da funcionalidade de machine learning estão em:
 - `machine-learning/main.js`
 - `machine-learning/worker.js`
 
-Em `machine-learning/main.js` acontece a integração com o jogo (HUD, mira e disparo automático).
-Em `machine-learning/worker.js` ocorre o processamento de inferência para detectar os alvos e retornar as coordenadas previstas.
+Em `machine-learning/main.js` acontece a integração com o jogo (HUD, mira, disparo automático e tracking).
+Em `machine-learning/worker.js` ocorre a inferência do YOLOv5n em Web Worker.
 
 ## 📁 Estrutura do Projeto
 
@@ -68,6 +68,39 @@ http://localhost:8989
 - Modo "God" com assistência de IA para detectar patos e automatizar tiros
 - Camada de visualização para acompanhar previsões geradas pelo modelo
 - Base preparada para experimentos e evolução de estratégias de automação
+
+---
+
+## 🎯 Como o Modo God funciona
+
+O modo é ativado/desativado pelo jogador pressionando a tecla **`g`** durante a partida.
+
+A inferência do YOLOv5n leva ~180ms entre capturar o canvas e disparar o clique. Nas fases finais isso é tempo suficiente pro pato sair do lugar, e o tiro erra mesmo com previsão de velocidade.
+
+Para contornar, existe a flag `USE_REAL_DUCK_POSITIONS` em `machine-learning/main.js`:
+
+- `false` — mira 100% no que o YOLO detectou + leading. Honesto, mas erra nas fases altas.
+- `true` — o YOLO continua detectando e decidindo quando atirar, mas a coordenada final do clique vem de `game.stage.ducks` (posição exata do pato). Sem latência, sem jitter.
+
+### Quem faz o quê
+
+| Responsabilidade           | Quem faz                    |
+| -------------------------- | --------------------------- |
+| Detectar pato na tela      | YOLO                        |
+| Decidir se vale atirar     | YOLO + regras do jogo       |
+| Decidir qual pato atacar   | YOLO + tracker              |
+| Mira final (flag `false`)  | YOLO + leading              |
+| Mira final (flag `true`)   | Posição real do pato no jogo |
+
+Sem detecção do YOLO, nenhum tiro acontece nos dois modos.
+
+---
+
+## 🔮 Melhorias futuras
+
+- **Mira 100% via ML** (remover a flag `USE_REAL_DUCK_POSITIONS`). Caminhos: treinar um modelo customizado nos sprites do jogo, reduzir a latência de inferência (modelo menor / quantização) ou usar tracking mais robusto (Kalman) para o leading.
+- Visualização das bboxes/tracks no canvas para debug.
+- Métricas de hit/miss por wave para comparar os modos.
 
 ---
 

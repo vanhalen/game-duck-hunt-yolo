@@ -105,21 +105,67 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _layout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layout */ "./machine-learning/layout.js");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
-var PREDICT_INTERVAL_MS = 320;
+var PREDICT_INTERVAL_MS = 100;
+// Buffer adicional (ms) somado à latência medida captura → clique. Compensa
+// o pequeno atraso entre o handler do worker e a chamada de shotsFired.
+var EXTRA_LEAD_MS = 20;
+// Limite máximo (segundos) de lead aplicado. Protege contra picos de latência
+// (worker travado, GC, etc) que poderiam projetar o tiro muito longe.
+var MAX_LEAD_S = 0.5;
+// Quantos segundos um track sobrevive sem ser detectado. Aumentado pra
+// cobrir transições BREVES (cachorro pegando o pato, fly-away curto).
+// Transições longas (>1.5s) ainda invalidam — adequado.
+var MAX_TRACK_AGE_S = 1.5;
+// Distância máxima entre a posição PREVISTA do track e a detecção atual.
+// Distância ADAPTATIVA: tracks com velocidade conhecida (hist>=2) usam um
+// limite apertado porque a previsão é confiável. Tracks novos (hist=1, vx=0)
+// usam um limite largo pra cobrir o deslocamento do pato no 1º bootstrap.
+var MAX_TRACK_DISTANCE_NEW = 300; // hist=1, vx=0
+var MAX_TRACK_DISTANCE_TRACKED = 160; // hist>=2, vx confiável
+// Velocidade máxima plausível (px/s no stage). Patos no level 6 (speed 8) fazem
+// ~940 px/s; associações que produziriam velocidade acima disso são REJEITADAS
+// (a detecção é tratada como track novo em vez de prosseguir a associação).
+var MAX_TRACK_SPEED = 1100;
+// Quantas detecções recentes são guardadas por track para estimar velocidade
+// via regressão linear. Menor = responde mais rápido a mudanças de direção
+// dos patos (que mudam ao bater nas bordas).
+var VELOCITY_HISTORY_SIZE = 3;
+// Detecções com distância menor que isso são consideradas duplicatas (NMS
+// frouxo) e a de menor score é descartada.
+var NMS_DEDUP_DISTANCE = 25;
+
+// MODO HÍBRIDO: se true, o ML continua DETECTANDO/decidindo quais patos
+// atacar e quando atirar (e respeita as regras do jogo), mas a posição final
+// do clique é a posição EXATA do pato mais próximo da detecção em
+// `game.stage.ducks`. É "trapaça" — o ML deixa de fazer a mira final — mas
+// elimina o atraso captura→clique e jitter de bbox. Use quando a precisão
+// pura do ML não é suficiente (ex: fases 5/6 com patos rápidos e poucas
+// balas). Distância máxima para casar uma detecção com um pato real:
+var USE_REAL_DUCK_POSITIONS = true;
+var REAL_DUCK_MATCH_DISTANCE = 200;
 function main(_x) {
   return _main.apply(this, arguments);
 }
 function _main() {
-  _main = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(game) {
-    var container, worker, godModeEnabled, predictIntervalId, stopPredictLoop, startPredictLoop, setGodMode;
-    return _regenerator().w(function (_context2) {
-      while (1) switch (_context2.n) {
+  _main = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(game) {
+    var container, worker, godModeEnabled, predictIntervalId, workerBusy, lastTracks, lastUpdateStats, stopPredictLoop, dedupDetections, lastPoint, regressVelocity, updateTracks, canShoot, captureStageBitmap, _captureStageBitmap, startPredictLoop, findClosestAliveDuck, setGodMode;
+    return _regenerator().w(function (_context3) {
+      while (1) switch (_context3.n) {
         case 0:
           setGodMode = function _setGodMode(enabled) {
             godModeEnabled = enabled;
+            lastTracks = [];
+            workerBusy = false;
             if (enabled) {
               startPredictLoop();
             } else {
@@ -127,33 +173,320 @@ function _main() {
               game.stage.aim.visible = false;
             }
           };
+          findClosestAliveDuck = function _findClosestAliveDuck(gameRef, x, y, used) {
+            var best = null;
+            var bestDist = REAL_DUCK_MATCH_DISTANCE;
+            var _iterator7 = _createForOfIteratorHelper(gameRef.stage.ducks),
+              _step7;
+            try {
+              for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+                var duck = _step7.value;
+                if (!duck.alive || used.has(duck)) continue;
+                var d = Math.hypot(duck.x - x, duck.y - y);
+                if (d < bestDist) {
+                  bestDist = d;
+                  best = duck;
+                }
+              }
+            } catch (err) {
+              _iterator7.e(err);
+            } finally {
+              _iterator7.f();
+            }
+            return best;
+          };
           startPredictLoop = function _startPredictLoop() {
             stopPredictLoop();
             predictIntervalId = setInterval(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-              var canvas, bitmap;
+              var _yield$captureStageBi, bitmap, captureT, _t;
               return _regenerator().w(function (_context) {
-                while (1) switch (_context.n) {
+                while (1) switch (_context.p = _context.n) {
                   case 0:
-                    if (!(!godModeEnabled || game.paused)) {
+                    if (!(!godModeEnabled || game.paused || workerBusy)) {
                       _context.n = 1;
                       break;
                     }
                     return _context.a(2);
                   case 1:
-                    canvas = game.app.renderer.extract.canvas(game.stage);
-                    _context.n = 2;
-                    return createImageBitmap(canvas);
+                    if (canShoot()) {
+                      _context.n = 2;
+                      break;
+                    }
+                    return _context.a(2);
                   case 2:
-                    bitmap = _context.v;
+                    workerBusy = true;
+                    _context.p = 3;
+                    _context.n = 4;
+                    return captureStageBitmap();
+                  case 4:
+                    _yield$captureStageBi = _context.v;
+                    bitmap = _yield$captureStageBi.bitmap;
+                    captureT = _yield$captureStageBi.captureT;
                     worker.postMessage({
                       type: 'predict',
-                      image: bitmap
+                      image: bitmap,
+                      captureT: captureT
                     }, [bitmap]);
-                  case 3:
+                    _context.n = 6;
+                    break;
+                  case 5:
+                    _context.p = 5;
+                    _t = _context.v;
+                    workerBusy = false;
+                    console.error('AI capture failed', _t);
+                  case 6:
                     return _context.a(2);
                 }
-              }, _callee);
+              }, _callee, null, [[3, 5]]);
             })), PREDICT_INTERVAL_MS);
+          };
+          _captureStageBitmap = function _captureStageBitmap3() {
+            _captureStageBitmap = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+              var aimWasVisible, hudWasVisible, captureT, canvas, bitmap;
+              return _regenerator().w(function (_context2) {
+                while (1) switch (_context2.n) {
+                  case 0:
+                    // Esconde mira/HUD antes da extração para não confundir o detector com a
+                    // própria mira/textos. Restaura logo em seguida (síncrono), então o usuário
+                    // não percebe pois o ticker do PIXI só re-renderiza no próximo frame.
+                    aimWasVisible = game.stage.aim.visible;
+                    hudWasVisible = game.stage.hud.visible;
+                    game.stage.aim.visible = false;
+                    game.stage.hud.visible = false;
+
+                    // Marca o instante exato da captura: usado depois para medir a latência
+                    // real captura → clique e aplicar o lead correspondente.
+                    captureT = performance.now();
+                    try {
+                      canvas = game.app.renderer.extract.canvas(game.stage);
+                    } finally {
+                      game.stage.aim.visible = aimWasVisible;
+                      game.stage.hud.visible = hudWasVisible;
+                    }
+                    _context2.n = 1;
+                    return createImageBitmap(canvas);
+                  case 1:
+                    bitmap = _context2.v;
+                    return _context2.a(2, {
+                      bitmap: bitmap,
+                      captureT: captureT
+                    });
+                }
+              }, _callee2);
+            }));
+            return _captureStageBitmap.apply(this, arguments);
+          };
+          captureStageBitmap = function _captureStageBitmap2() {
+            return _captureStageBitmap.apply(this, arguments);
+          };
+          canShoot = function _canShoot() {
+            return godModeEnabled && !game.paused && !!game.stage && !game.stage.dogActive() && !game.shouldWaveEnd() && !game.outOfAmmo() && game.stage.ducksAlive();
+          };
+          updateTracks = function _updateTracks(detections, captureTSec) {
+            var now = captureTSec;
+
+            // 1) Mantém só tracks dentro da idade máxima ("fantasmas").
+            var candidates = lastTracks.filter(function (t) {
+              return now - lastPoint(t).t < MAX_TRACK_AGE_S;
+            });
+            var candidatesCountStart = candidates.length;
+
+            // 2) Calcula posição prevista de cada track candidato.
+            var predicted = candidates.map(function (t) {
+              var lp = lastPoint(t);
+              var dt = now - lp.t;
+              return {
+                px: lp.x + t.vx * dt,
+                py: lp.y + t.vy * dt
+              };
+            });
+            var _iterator4 = _createForOfIteratorHelper(candidates),
+              _step4;
+            try {
+              for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+                var t = _step4.value;
+                t.detectedThisFrame = false;
+              }
+
+              // 3) Associação gulosa: detecções de maior confiança escolhem primeiro
+              //    o track candidato cuja posição PREVISTA está mais próxima.
+              //    IMPORTANTE: só itera até `candidatesCountStart`. Tracks novos criados
+              //    nesta iteração NÃO entram como candidatos para outras detecções.
+            } catch (err) {
+              _iterator4.e(err);
+            } finally {
+              _iterator4.f();
+            }
+            var sortedDets = _toConsumableArray(detections).sort(function (a, b) {
+              return b.score - a.score;
+            });
+            var usedTracks = new Set();
+            var tracksAfter = _toConsumableArray(candidates);
+            var associations = 0;
+            var _iterator5 = _createForOfIteratorHelper(sortedDets),
+              _step5;
+            try {
+              for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+                var det = _step5.value;
+                // Acha o melhor candidato dentro do limite adaptativo de distância.
+                // Importante: também rejeita pares que produziriam velocidade absurda
+                // (sinal claro de que são patos DIFERENTES sendo confundidos).
+                var bestIdx = -1;
+                var bestDist = Infinity;
+                var bestNewHistory = null;
+                var bestVx = 0;
+                var bestVy = 0;
+                for (var i = 0; i < candidatesCountStart; i++) {
+                  if (usedTracks.has(i)) continue;
+                  var tr = tracksAfter[i];
+                  var maxDist = tr.history.length >= 2 ? MAX_TRACK_DISTANCE_TRACKED : MAX_TRACK_DISTANCE_NEW;
+                  var d = Math.hypot(det.x - predicted[i].px, det.y - predicted[i].py);
+                  if (d >= maxDist || d >= bestDist) continue;
+
+                  // Tenta a associação: verifica se a velocidade resultante é razoável.
+                  var candidateHistory = tr.history.slice(-(VELOCITY_HISTORY_SIZE - 1));
+                  candidateHistory.push({
+                    x: det.x,
+                    y: det.y,
+                    t: captureTSec
+                  });
+                  var _regressVelocity = regressVelocity(candidateHistory),
+                    vx = _regressVelocity.vx,
+                    vy = _regressVelocity.vy;
+                  if (Math.hypot(vx, vy) >= MAX_TRACK_SPEED) continue;
+                  bestIdx = i;
+                  bestDist = d;
+                  bestNewHistory = candidateHistory;
+                  bestVx = vx;
+                  bestVy = vy;
+                }
+                if (bestIdx >= 0) {
+                  usedTracks.add(bestIdx);
+                  var _tr = tracksAfter[bestIdx];
+                  _tr.history = bestNewHistory;
+                  _tr.vx = bestVx;
+                  _tr.vy = bestVy;
+                  _tr.x = det.x;
+                  _tr.y = det.y;
+                  _tr.score = det.score;
+                  _tr.detectedThisFrame = true;
+                  associations += 1;
+                } else {
+                  // Sem track plausível → cria novo (tratado como pato recém-aparecido).
+                  var newTrack = {
+                    history: [{
+                      x: det.x,
+                      y: det.y,
+                      t: captureTSec
+                    }],
+                    vx: 0,
+                    vy: 0,
+                    x: det.x,
+                    y: det.y,
+                    score: det.score,
+                    detectedThisFrame: true
+                  };
+                  tracksAfter.push(newTrack);
+                }
+              }
+            } catch (err) {
+              _iterator5.e(err);
+            } finally {
+              _iterator5.f();
+            }
+            lastTracks = tracksAfter;
+            lastUpdateStats = {
+              candidatesAtStart: candidatesCountStart,
+              detections: detections.length,
+              associations: associations,
+              newTracks: detections.length - associations
+            };
+            return tracksAfter.filter(function (t) {
+              return t.detectedThisFrame;
+            }).sort(function (a, b) {
+              return b.score - a.score;
+            });
+          };
+          regressVelocity = function _regressVelocity2(history) {
+            var n = history.length;
+            if (n < 2) return {
+              vx: 0,
+              vy: 0
+            };
+            var sumT = 0;
+            var sumX = 0;
+            var sumY = 0;
+            var _iterator2 = _createForOfIteratorHelper(history),
+              _step2;
+            try {
+              for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+                var p = _step2.value;
+                sumT += p.t;
+                sumX += p.x;
+                sumY += p.y;
+              }
+            } catch (err) {
+              _iterator2.e(err);
+            } finally {
+              _iterator2.f();
+            }
+            var meanT = sumT / n;
+            var meanX = sumX / n;
+            var meanY = sumY / n;
+            var num_x = 0;
+            var num_y = 0;
+            var den = 0;
+            var _iterator3 = _createForOfIteratorHelper(history),
+              _step3;
+            try {
+              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+                var _p = _step3.value;
+                var dt = _p.t - meanT;
+                num_x += dt * (_p.x - meanX);
+                num_y += dt * (_p.y - meanY);
+                den += dt * dt;
+              }
+            } catch (err) {
+              _iterator3.e(err);
+            } finally {
+              _iterator3.f();
+            }
+            if (den === 0) return {
+              vx: 0,
+              vy: 0
+            };
+            return {
+              vx: num_x / den,
+              vy: num_y / den
+            };
+          };
+          lastPoint = function _lastPoint(track) {
+            return track.history[track.history.length - 1];
+          };
+          dedupDetections = function _dedupDetections(detections) {
+            var sorted = _toConsumableArray(detections).sort(function (a, b) {
+              return b.score - a.score;
+            });
+            var kept = [];
+            var _iterator = _createForOfIteratorHelper(sorted),
+              _step;
+            try {
+              var _loop = function _loop() {
+                var det = _step.value;
+                var tooClose = kept.some(function (k) {
+                  return Math.hypot(k.x - det.x, k.y - det.y) < NMS_DEDUP_DISTANCE;
+                });
+                if (!tooClose) kept.push(det);
+              };
+              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                _loop();
+              }
+            } catch (err) {
+              _iterator.e(err);
+            } finally {
+              _iterator.f();
+            }
+            return kept;
           };
           stopPredictLoop = function _stopPredictLoop() {
             if (predictIntervalId != null) {
@@ -167,26 +500,161 @@ function _main() {
           });
           godModeEnabled = false;
           predictIntervalId = null;
+          workerBusy = false; // Lista de tracks da última iteração: cada track é
+          //   { history: [{x, y, t}, ...], vx, vy, score }
+          // O histórico mantém as últimas VELOCITY_HISTORY_SIZE detecções daquele pato
+          // e a velocidade é estimada com regressão linear sobre o histórico — muito
+          // mais estável que um delta entre 2 frames.
+          lastTracks = []; // Estatísticas da última chamada de updateTracks, expostas para diagnóstico.
+          lastUpdateStats = {
+            candidatesAtStart: 0,
+            detections: 0,
+            associations: 0,
+            newTracks: 0
+          };
           game.stage.aim.visible = false;
+
+          /**
+           * Regressão linear simples sobre um array de pontos {x, y, t} (segundos).
+           * Retorna o slope (vx, vy) — derivada de x e y em relação ao tempo.
+           * Um único ponto retorna velocidade zero.
+           */
+
+          /**
+           * Atualiza `lastTracks` com as detecções do frame atual:
+           *  - Tracks anteriores ainda dentro de MAX_TRACK_AGE_S sobrevivem
+           *    (mesmo sem detecção neste frame).
+           *  - Posição PREVISTA = última posição + vx*dt; usada para associar
+           *    detecções atuais com tracks existentes.
+           *  - Detecções não associadas viram tracks novos.
+           *  - Retorna apenas os tracks que receberam detecção neste frame
+           *    (alvos válidos para tiro), ordenados por score desc.
+           */
+
           worker.onmessage = function (_ref2) {
             var data = _ref2.data;
-            var type = data.type;
-            if (type === 'prediction' && godModeEnabled && !game.paused) {
-              console.log("\uD83C\uDFAF AI predicted at: (".concat(data.x, ", ").concat(data.y, ")"));
-              container.updateHUD(data);
-              game.stage.aim.visible = true;
-              game.stage.aim.setPosition(data.x, data.y);
-              var position = game.stage.aim.getGlobalPosition();
-              game.handleClick({
-                global: position
-              });
+            if (data.type !== 'predictions') return;
+            workerBusy = false;
+            if (!godModeEnabled || game.paused) return;
+            if (!canShoot()) {
+              // Não zera lastTracks — a função updateTracks() filtra por idade.
+              return;
+            }
+
+            // Não zera lastTracks só porque o detector não viu nada nesta frame;
+            // o pato pode reaparecer no próximo frame e queremos manter sua identidade.
+            // updateTracks() filtra automaticamente por MAX_TRACK_AGE_S.
+            var _data$detections = data.detections,
+              detections = _data$detections === void 0 ? [] : _data$detections;
+
+            // (det.x, det.y) vêm em coordenadas LOCAIS do stage: o
+            // `extract.canvas(stage)` rasteriza o stage no seu tamanho natural ≈800×600,
+            // sem aplicar o scaleToWindow. Por isso posicionamos a mira (filha do
+            // stage) com setPosition e convertemos para coordenadas globais via
+            // getGlobalPosition() para passar ao handleClick.
+
+            var now = performance.now();
+            // Timestamp REAL da frame analisada. Cai pra `now` se o worker (por
+            // qualquer motivo) não ecoou de volta o captureT.
+            var captureT = typeof data.captureT === 'number' ? data.captureT : now;
+
+            // Lead dinâmico = latência real medida (now - captureT) + buffer extra.
+            // Saturamos em MAX_LEAD_S para proteger contra picos de latência (GC,
+            // throttling de aba inativa, etc) que projetariam o tiro longe demais.
+            var measuredLatencyS = Math.max(0, (now - captureT) / 1000);
+            var lead = Math.min(MAX_LEAD_S, measuredLatencyS + EXTRA_LEAD_MS / 1000);
+
+            // 1) Remove duplicatas (NMS frouxo) — caixas muito próximas vêm do mesmo
+            //    pato e gastariam balas duplicadas.
+            var unique = dedupDetections(detections);
+
+            // 2) Atualiza os tracks (persistem entre frames). Retorna apenas os que
+            //    receberam detecção neste frame, ordenados por confiança.
+            var tracks = updateTracks(unique, captureT / 1000);
+            if (tracks.length === 0) {
+              // Sem alvo neste frame, nada para atirar. Tracks "fantasmas" continuam
+              // vivos em lastTracks até envelhecerem.
+              return;
+            }
+
+            // 3) Limita o número de tiros ao número de patos vivos para não desperdiçar
+            //    munição em falsos positivos.
+            var ducksAliveCount = game.stage.ducks.filter(function (d) {
+              return d.alive;
+            }).length;
+            var maxShots = Math.min(tracks.length, Math.max(ducksAliveCount, 1));
+            var targets = tracks.slice(0, maxShots);
+            var best = targets[0];
+
+            // Log resumido do frame (todos os alvos), antes dos tiros.
+            var summary = targets.map(function (tr) {
+              return "[h=".concat(tr.history.length, " v=(").concat(Math.round(tr.vx), ",").concat(Math.round(tr.vy), ") s=").concat(tr.score.toFixed(2), "]");
+            }).join(' ');
+            console.log("AI frame: lead=".concat((lead * 1000).toFixed(0), "ms cand\u2192det/assoc/new=").concat(lastUpdateStats.candidatesAtStart, "\u2192").concat(lastUpdateStats.detections, "/").concat(lastUpdateStats.associations, "/").concat(lastUpdateStats.newTracks, " targets=").concat(targets.length, " ").concat(summary));
+
+            // Conjunto de patos já mirados neste frame, pra evitar atirar duas vezes
+            // no mesmo pato quando o ML detectou duplicatas (modo híbrido).
+            var usedDucks = new Set();
+            var _iterator6 = _createForOfIteratorHelper(targets),
+              _step6;
+            try {
+              for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+                var tr = _step6.value;
+                if (!canShoot()) break;
+
+                // Posição "honesta": detecção + leading com a velocidade estimada.
+                var targetX = tr.x + tr.vx * lead;
+                var targetY = tr.y + tr.vy * lead;
+                if (USE_REAL_DUCK_POSITIONS) {
+                  // Modo híbrido: usa o ML só pra DECIDIR atirar, mas mira na posição
+                  // real do pato vivo mais próximo da detecção.
+                  var realDuck = findClosestAliveDuck(game, tr.x, tr.y, usedDucks);
+                  if (realDuck) {
+                    usedDucks.add(realDuck);
+                    targetX = realDuck.x;
+                    targetY = realDuck.y;
+                  } else {
+                    // Sem pato real plausível: pula este alvo (provavelmente falso
+                    // positivo do ML).
+                    continue;
+                  }
+                }
+                if (tr === best) {
+                  container.updateHUD({
+                    score: (tr.score * 100).toFixed(2),
+                    x: targetX,
+                    y: targetY
+                  });
+                  game.stage.aim.visible = true;
+                }
+                game.stage.aim.setPosition(targetX, targetY);
+                var globalPosition = game.stage.aim.getGlobalPosition();
+                game.handleClick({
+                  global: globalPosition
+                });
+              }
+            } catch (err) {
+              _iterator6.e(err);
+            } finally {
+              _iterator6.f();
             }
           };
-          return _context2.a(2, {
+
+          /**
+           * Acha o pato vivo mais próximo da posição (x, y) na stage, ignorando os
+           * que já foram alvo neste frame. Retorna null se nenhum estiver dentro de
+           * REAL_DUCK_MATCH_DISTANCE.
+           */
+
+          worker.onerror = function (err) {
+            workerBusy = false;
+            console.error('AI worker error', err);
+          };
+          return _context3.a(2, {
             setGodMode: setGodMode
           });
       }
-    }, _callee2);
+    }, _callee3);
   }));
   return _main.apply(this, arguments);
 }
