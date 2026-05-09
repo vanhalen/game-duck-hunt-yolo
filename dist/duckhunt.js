@@ -116,39 +116,32 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
 var PREDICT_INTERVAL_MS = 100;
-// Buffer adicional (ms) somado à latência medida captura → clique. Compensa
+// Buffer adicional (ms) somado à latência medida captura -> clique. Compensa
 // o pequeno atraso entre o handler do worker e a chamada de shotsFired.
 var EXTRA_LEAD_MS = 20;
-// Limite máximo (segundos) de lead aplicado. Protege contra picos de latência
+// Limite máximo. Protege contra picos de latência
 // (worker travado, GC, etc) que poderiam projetar o tiro muito longe.
 var MAX_LEAD_S = 0.5;
-// Quantos segundos um track sobrevive sem ser detectado. Aumentado pra
-// cobrir transições BREVES (cachorro pegando o pato, fly-away curto).
-// Transições longas (>1.5s) ainda invalidam — adequado.
+// Quantos seg um track sobrevive sem ser detectado. Aumentado pra
+// cobrir transições breves.
 var MAX_TRACK_AGE_S = 1.5;
 // Distância máxima entre a posição PREVISTA do track e a detecção atual.
-// Distância ADAPTATIVA: tracks com velocidade conhecida (hist>=2) usam um
-// limite apertado porque a previsão é confiável. Tracks novos (hist=1, vx=0)
-// usam um limite largo pra cobrir o deslocamento do pato no 1º bootstrap.
 var MAX_TRACK_DISTANCE_NEW = 300; // hist=1, vx=0
 var MAX_TRACK_DISTANCE_TRACKED = 160; // hist>=2, vx confiável
-// Velocidade máxima plausível (px/s no stage). Patos no level 6 (speed 8) fazem
+// Velocidade máxima (px/s no stage). Patos no level 6 (speed 8) fazem
 // ~940 px/s; associações que produziriam velocidade acima disso são REJEITADAS
 // (a detecção é tratada como track novo em vez de prosseguir a associação).
 var MAX_TRACK_SPEED = 1100;
 // Quantas detecções recentes são guardadas por track para estimar velocidade
-// via regressão linear. Menor = responde mais rápido a mudanças de direção
-// dos patos (que mudam ao bater nas bordas).
+// via regressão linear.
 var VELOCITY_HISTORY_SIZE = 3;
-// Detecções com distância menor que isso são consideradas duplicatas (NMS
-// frouxo) e a de menor score é descartada.
 var NMS_DEDUP_DISTANCE = 25;
 
 // MODO HÍBRIDO: se true, o ML continua DETECTANDO/decidindo quais patos
 // atacar e quando atirar (e respeita as regras do jogo), mas a posição final
 // do clique é a posição EXATA do pato mais próximo da detecção em
-// `game.stage.ducks`. É "trapaça" — o ML deixa de fazer a mira final — mas
-// elimina o atraso captura→clique e jitter de bbox. Use quando a precisão
+// `game.stage.ducks`. É "trapaça" - o ML deixa de fazer a mira final - mas
+// elimina o atraso captura→clique e jitter de bbox. Usar quando a precisão
 // pura do ML não é suficiente (ex: fases 5/6 com patos rápidos e poucas
 // balas). Distância máxima para casar uma detecção com um pato real:
 var USE_REAL_DUCK_POSITIONS = true;
@@ -255,7 +248,7 @@ function _main() {
                     game.stage.hud.visible = false;
 
                     // Marca o instante exato da captura: usado depois para medir a latência
-                    // real captura → clique e aplicar o lead correspondente.
+                    // real captura -> clique e aplicar o lead correspondente.
                     captureT = performance.now();
                     try {
                       canvas = game.app.renderer.extract.canvas(game.stage);
@@ -372,7 +365,7 @@ function _main() {
                   _tr.detectedThisFrame = true;
                   associations += 1;
                 } else {
-                  // Sem track plausível → cria novo (tratado como pato recém-aparecido).
+                  // Sem track plausível -> cria novo (tratado como pato recém-aparecido).
                   var newTrack = {
                     history: [{
                       x: det.x,
@@ -540,31 +533,18 @@ function _main() {
               // Não zera lastTracks — a função updateTracks() filtra por idade.
               return;
             }
-
-            // Não zera lastTracks só porque o detector não viu nada nesta frame;
-            // o pato pode reaparecer no próximo frame e queremos manter sua identidade.
-            // updateTracks() filtra automaticamente por MAX_TRACK_AGE_S.
             var _data$detections = data.detections,
               detections = _data$detections === void 0 ? [] : _data$detections;
-
-            // (det.x, det.y) vêm em coordenadas LOCAIS do stage: o
-            // `extract.canvas(stage)` rasteriza o stage no seu tamanho natural ≈800×600,
-            // sem aplicar o scaleToWindow. Por isso posicionamos a mira (filha do
-            // stage) com setPosition e convertemos para coordenadas globais via
-            // getGlobalPosition() para passar ao handleClick.
-
             var now = performance.now();
-            // Timestamp REAL da frame analisada. Cai pra `now` se o worker (por
-            // qualquer motivo) não ecoou de volta o captureT.
             var captureT = typeof data.captureT === 'number' ? data.captureT : now;
 
             // Lead dinâmico = latência real medida (now - captureT) + buffer extra.
-            // Saturamos em MAX_LEAD_S para proteger contra picos de latência (GC,
-            // throttling de aba inativa, etc) que projetariam o tiro longe demais.
+            // Satura em MAX_LEAD_S para proteger contra picos de latência,
+            // que projetariam o tiro longe demais.
             var measuredLatencyS = Math.max(0, (now - captureT) / 1000);
             var lead = Math.min(MAX_LEAD_S, measuredLatencyS + EXTRA_LEAD_MS / 1000);
 
-            // 1) Remove duplicatas (NMS frouxo) — caixas muito próximas vêm do mesmo
+            // 1) Remove duplicatas (NMS frouxo) - caixas muito próximas vêm do mesmo
             //    pato e gastariam balas duplicadas.
             var unique = dedupDetections(detections);
 
@@ -113741,6 +113721,7 @@ document.addEventListener('DOMContentLoaded', /*#__PURE__*/_asyncToGenerator(/*#
         return (0,_machine_learning_main__WEBPACK_IMPORTED_MODULE_0__["default"])(game);
       case 2:
         game.mlGod = _context.v;
+        window.game = game;
       case 3:
         return _context.a(2);
     }

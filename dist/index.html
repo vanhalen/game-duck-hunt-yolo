@@ -1,22 +1,338 @@
 <!DOCTYPE HTML>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<html>
+<html lang="pt-BR">
 <head>
   <title>DuckHuntJS</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="description" content="An open source, web based, responsive implementation of Duck Hunt in canvas or webgl depending on your client.">
   <meta name="author" content="Matt Surabian">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
   <style>
     body {
-      overflow:hidden;
+      overflow: hidden;
       margin: 0;
       padding: 0;
       background-color: #000000;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* Botão flutuante de créditos: discreto, fora da zona de jogo principal */
+    .credits-btn {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 9998;
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.55);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+    .credits-btn:hover {
+      background: rgba(99, 102, 241, 0.85);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: scale(1.05);
+    }
+    .credits-btn:focus-visible {
+      outline: 2px solid #a5b4fc;
+      outline-offset: 2px;
+    }
+
+    /* Backdrop do modal */
+    .credits-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.18s ease-out;
+    }
+    .credits-backdrop.is-open {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Card do modal */
+    .credits-card {
+      width: 100%;
+      max-width: 420px;
+      background: #0f172a;
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 28px 26px;
+      box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.35);
+      text-align: center;
+      position: relative;
+    }
+    .credits-card .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: transparent;
+      color: #94a3b8;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .credits-card .close-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
+    }
+    .credits-card h2 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.01em;
+    }
+    .credits-card .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #818cf8;
+      margin-bottom: 6px;
+    }
+    .credits-card .subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin: 0 0 22px;
+    }
+    .credits-card .social-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .credits-card .social-row a {
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      font-size: 20px;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+    .credits-card .social-row a:hover {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: rgba(165, 180, 252, 0.5);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .credits-card .contact-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .credits-card .contact-row a {
+      color: #cbd5e1;
+      font-size: 13px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.15s ease;
+    }
+    .credits-card .contact-row a i {
+      color: #818cf8;
+    }
+    .credits-card .contact-row a:hover {
+      color: #ffffff;
+    }
+    .credits-card .contact-row .contact-cta {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(165, 180, 252, 0.4);
+      color: #c7d2fe;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .credits-card .contact-row .contact-cta:hover {
+      background: rgba(99, 102, 241, 0.18);
+      color: #ffffff;
+    }
+    .credits-card .copyright {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+    .credits-card .copyright a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .credits-card .copyright a:hover {
+      color: #a5b4fc;
+    }
+    .credits-card .hint {
+      margin-top: 14px;
+      font-size: 11px;
+      color: #475569;
+    }
+    .credits-card .hint kbd {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-family: inherit;
+    }
+
+    @media (max-width: 480px) {
+      .credits-btn {
+        top: 10px;
+        right: 10px;
+      }
     }
   </style>
   <script src="duckhunt.js"></script>
 </head>
 <body>
+
+  <button id="creditsBtn" type="button" class="credits-btn"
+    title="Sobre o desenvolvedor (i)" aria-label="Abrir créditos do desenvolvedor">
+    <i class="bi bi-info-lg"></i>
+  </button>
+
+  <div id="creditsModal" class="credits-backdrop" role="dialog" aria-modal="true" aria-labelledby="creditsTitle">
+    <div class="credits-card" role="document">
+      <button id="creditsClose" type="button" class="close-btn" aria-label="Fechar créditos">
+        <i class="bi bi-x-lg"></i>
+      </button>
+
+      <p class="eyebrow">Duck Hunt + IA</p>
+      <h2 id="creditsTitle">Desenvolvido por Rodrigo Chagas</h2>
+      <p class="subtitle">Releitura do clássico com modo God assistido por YOLOv5n.</p>
+
+      <div class="social-row">
+        <a href="https://www.linkedin.com/in/rodrigo-chagas-98792199" target="_blank" rel="noopener noreferrer"
+          aria-label="LinkedIn de Rodrigo Chagas">
+          <i class="bi bi-linkedin"></i>
+        </a>
+        <a href="https://github.com/vanhalen" target="_blank" rel="noopener noreferrer"
+          aria-label="GitHub de Rodrigo Chagas">
+          <i class="bi bi-github"></i>
+        </a>
+      </div>
+
+      <div class="contact-row">
+        <a href="mailto:contato@rodrigorchagas.com.br">
+          <i class="bi bi-envelope-fill"></i>
+          contato@rodrigorchagas.com.br
+        </a>
+        <a href="https://rodrigorchagas.com.br/contato" target="_blank" rel="noopener noreferrer" class="contact-cta">
+          Entre em contato
+        </a>
+      </div>
+
+      <p class="copyright">
+        <a href="https://rodrigorchagas.com.br" target="_blank" rel="noopener noreferrer">
+          Rodrigo Chagas&copy; 2026-<span id="currentYear"></span> Todos os direitos reservados
+        </a>
+      </p>
+
+      <p class="hint">
+        <kbd>i</kbd> abre/fecha &middot; <kbd>Esc</kbd> fecha &middot; o jogo pausa enquanto este painel está aberto
+      </p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var modal = document.getElementById('creditsModal');
+      var openBtn = document.getElementById('creditsBtn');
+      var closeBtn = document.getElementById('creditsClose');
+      var yearEl = document.getElementById('currentYear');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // Pausa o jogo somente se NÃO estava pausado já (pra não competir com a tecla 'p').
+      var pausedByModal = false;
+
+      function getGame() { return window.game; }
+
+      function openModal() {
+        if (modal.classList.contains('is-open')) return;
+        modal.classList.add('is-open');
+        var game = getGame();
+        if (game && !game.paused) {
+          pausedByModal = true;
+          game.pause();
+        } else {
+          pausedByModal = false;
+        }
+      }
+
+      function closeModal() {
+        if (!modal.classList.contains('is-open')) return;
+        modal.classList.remove('is-open');
+        if (pausedByModal) {
+          var game = getGame();
+          if (game && game.paused) game.pause();
+          pausedByModal = false;
+        }
+      }
+
+      openBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openModal();
+      });
+      closeBtn.addEventListener('click', closeModal);
+
+      // Clique no backdrop (fora do card) fecha.
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+      });
+
+      // Atalhos: 'i' alterna, 'Esc' fecha. Não interfere com p/g/m/c/f do jogo.
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+      });
+      document.addEventListener('keypress', function (e) {
+        if (e.key === 'i' || e.key === 'I') {
+          if (modal.classList.contains('is-open')) closeModal();
+          else openModal();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

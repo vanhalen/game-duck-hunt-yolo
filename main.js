@@ -8,4 +8,5 @@ document.addEventListener('DOMContentLoaded', async function () {
   await game.load();
   game.mlGod = await main(game);
 
+  window.game = game;
 }, false);
